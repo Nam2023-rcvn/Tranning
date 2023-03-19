@@ -24,7 +24,7 @@ class GetProductList extends Controller
             $products = $products->paginate($request->page_size ?? 10);
         }
 
-        return ProductResource::collection($products->paginate($request->perPage ?? 10));
+        return ProductResource::collection($products);
     }
 
     public function filterProducts(GetProductListRequest $request): Builder

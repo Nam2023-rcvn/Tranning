@@ -102,9 +102,11 @@
         </b-row>
       </div>
 
-      <b-table ref="refProductListTable" class="position-relative" :items="fetchProducts" responsive
+      <b-table
+        ref="refProductListTable" class="position-relative" :items="fetchProducts" responsive
         :fields="tableColumns" primary-key="id" :sort-by.sync="sortBy" show-empty empty-text="No matching records found"
-        :sort-desc.sync="isSortDirDesc">
+        :sort-desc.sync="isSortDirDesc"
+      >
 
         <!-- Column: id -->
         <template #cell(id)="data">
@@ -115,8 +117,21 @@
 
         <!-- Column: product_name -->
         <template #cell(product_name)="data">
-          <div class="text-nowrap">
-            <span class="align-text-top text-capitalize">{{ data.item.product_name }}</span>
+          <div @mouseleave="mouseleaveItem(data.item.id)">
+            <div 
+              class="text-nowrap"
+              @mouseover="mouseoverItem(data.item.id)"
+              
+            >
+              <span class="align-text-top text-capitalize">{{ data.item.product_name }}</span>
+            </div>
+            <img
+              v-if="isHover == data.item.id"
+              class="hover-img"
+              alt="img-3"
+              width="90"
+              :src="data.item.product_image"
+            />
           </div>
         </template>
 
@@ -195,7 +210,8 @@ import {
   BDropdown,
   BDropdownItem,
   BPagination,
-  BCardBody
+  BCardBody,
+  BImg,
 } from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import store from '@/store'
@@ -224,6 +240,12 @@ export default {
 
     vSelect,
     BCardBody,
+    BImg,
+  },
+  data() {
+    return {
+      isHover : null
+    }
   },
   setup() {
 
@@ -355,6 +377,16 @@ export default {
             },
           })
         })
+    },
+    hoverRow(record, index){
+    },
+    mouseoverItem(id){
+      console.log('mouseoverItem')
+      this.isHover = id
+    },
+    mouseleaveItem(id){
+      console.log('mouseleaveItem')
+      this.isHover = null
     }
   }
 }
