@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
+use Illuminate\Validation\Rules\Password;
 
 class CreateUserRequest extends FormRequest
 {
@@ -29,7 +30,7 @@ class CreateUserRequest extends FormRequest
                 'confirmed',
                 'required',
                 'min:5',
-                // 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/i',
+                Password::min(5)->mixedCase()->numbers()
             ],
             'name' => ['required', 'min:5'],
             'email' => ['required', 'email', 'unique:'.get_class(new User()).',email'],

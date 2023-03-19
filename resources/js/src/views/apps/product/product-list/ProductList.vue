@@ -78,7 +78,7 @@
       </div>
 
       <div class="mx-2 mb-2">
-        <b-row>
+        <b-row v-if="totalProducts > 20">
           <!-- Pagination -->
           <b-col cols="12" sm="7" class="d-flex align-items-center justify-content-center justify-content-sm-end">
 
@@ -159,7 +159,7 @@
 
       </b-table>
       <div class="mx-2 mb-2">
-        <b-row>
+        <b-row v-if="totalProducts > 20">
           <!-- Pagination -->
           <b-col cols="12" sm="7" class="d-flex align-items-center justify-content-center justify-content-sm-end">
 

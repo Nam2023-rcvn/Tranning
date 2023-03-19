@@ -14,7 +14,17 @@ class GetCustomerList extends Controller
     {
         $customers = $this->filterCustomers($request);
 
-        return CustomerResource::collection($customers->paginate($request->perPage ?? 10));
+        if ($request->page == 1) {
+            $customers = $customers->paginate(20);
+            if ($customers->total() > 20) {
+                $customers->setCollection($customers->getCollection()->take(10));
+                $customers->resolveCurrentPage('page', 1);
+            }
+        } else {
+            $customers = $customers->paginate($request->page_size ?? 10);
+        }
+
+        return CustomerResource::collection($customers);
     }
 
     public function filterCustomers(GetCustomerListRequest $request): Builder
@@ -26,7 +36,7 @@ class GetCustomerList extends Controller
         }
 
         if ($request->filled('email')) {
-            $customers->where('email', $request->email);
+            $customers->where('email', 'like', '%'.$request->email.'%');
         }
 
         if ($request->filled('is_active')) {

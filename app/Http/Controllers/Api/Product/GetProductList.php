@@ -14,6 +14,16 @@ class GetProductList extends Controller
     {
         $products = $this->filterProducts($request);
 
+        if ($request->page == 1) {
+            $products = $products->paginate(20);
+            if ($products->total() > 20) {
+                $products->setCollection($products->getCollection()->take(10));
+                $products->resolveCurrentPage('page', 1);
+            }
+        } else {
+            $products = $products->paginate($request->page_size ?? 10);
+        }
+
         return ProductResource::collection($products->paginate($request->perPage ?? 10));
     }
 

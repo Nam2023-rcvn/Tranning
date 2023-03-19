@@ -14,7 +14,17 @@ class GetUserList extends Controller
     {
         $users = $this->filterUsers($request);
 
-        return UserResource::collection($users->paginate($request->perPage ?? 10));
+        if ($request->page == 1) {
+            $users = $users->paginate(20);
+            if ($users->total() > 20) {
+                $users->setCollection($users->getCollection()->take(10));
+                $users->resolveCurrentPage('page', 1);
+            }
+        } else {
+            $users = $users->paginate($request->page_size ?? 10);
+        }
+
+        return UserResource::collection($users);
     }
 
     public function filterUsers(GetUserListRequest $request): Builder
@@ -26,11 +36,15 @@ class GetUserList extends Controller
         }
 
         if ($request->filled('email')) {
-            $users->where('email', $request->email);
+            $users->where('email', 'like', '%'.$request->email.'%');
         }
 
         if ($request->filled('name')) {
             $users->where('name', 'like', '%'.$request->name.'%');
+        }
+
+        if ($request->filled('status')) {
+            $users->where('is_active', $request->status);
         }
 
         return $users;

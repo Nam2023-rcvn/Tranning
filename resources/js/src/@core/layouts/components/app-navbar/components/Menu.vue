@@ -5,12 +5,15 @@
       :id="`bookmark-${index}`"
       :key="index"
       :to="bookmark.route"
+      :style="[bookmark.route.name == $route.name ? {'background-color': '#7367f0'} : {} ]"
     >
       <!-- <feather-icon
         :icon="bookmark.icon"
         size="21"
       /> -->
-      <label>{{ bookmark.title }}</label>
+      <label
+        :style="[bookmark.route.name == $route.name ? {'color': 'white'} : {} ]"
+      >{{ bookmark.title }}</label>
       <b-tooltip
         triggers="hover"
         :target="`bookmark-${index}`"

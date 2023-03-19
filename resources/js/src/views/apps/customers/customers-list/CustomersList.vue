@@ -120,7 +120,7 @@
       </div>
 
       <div class="mx-2 mb-2">
-        <b-row>
+        <b-row v-if="totalCustomers > 20">
           <!-- Pagination -->
           <b-col cols="12" sm="7" class="d-flex align-items-center justify-content-center justify-content-sm-end">
 
@@ -247,7 +247,7 @@
             <div v-else="!data.item.isEdit">
               <b-button 
                 variant="primary"
-                class="mr-2"
+                class="mr-4"
                 @click="editRowHandler(data, 'save')"
                 type="submit"
                 :disabled="test"
@@ -256,7 +256,7 @@
               </b-button>
               <b-button 
                 variant="primary"
-                class="mr-2"
+                class="mr-4"
                 @click="editRowHandler(data, 'cancel')"
                 type="submit"
               >
@@ -268,7 +268,7 @@
       </b-table>
       
       <div class="mx-2 mb-2">
-        <b-row>
+        <b-row v-if="totalCustomers > 20">
           <!-- Pagination -->
           <b-col cols="12" sm="7" class="d-flex align-items-center justify-content-center justify-content-sm-end">
 
@@ -351,7 +351,8 @@ export default {
   data(){
     return {
       items: [],
-      test: false
+      test: false,
+      dataTmp: []
     }
   },
   setup() {
@@ -456,6 +457,13 @@ export default {
   // })
   methods: {
     editRowHandler(data, action) {
+      if(action === 'edit')
+      {
+        if(!(data.index in this.dataTmp)){
+          this.dataTmp[data.index] = JSON.parse( JSON.stringify( data.item ) )
+        }
+      }
+
       if(action === 'save')
       {
         var refCustomerListTable = this.$refs.refCustomerListTable
@@ -471,7 +479,7 @@ export default {
         if(check === true){
           store.dispatch('customers/updateCustomer', data.item)
           .then(response => { 
-            this.refetchData()
+            // this.refetchData()
           })
           .catch(error => {
             console.log(error)
@@ -499,6 +507,18 @@ export default {
       }
 
       data.item.isEdit = !data.item.isEdit
+      
+      if(action === 'cancel')
+      {
+        console.log('dataTmp')
+        console.log(data.item)
+
+        let dataCustomer = JSON.parse( JSON.stringify( this.dataTmp[data.index] ) )
+        data.item.address = dataCustomer.address
+        data.item.customer_name = dataCustomer.customer_name
+        data.item.email = dataCustomer.email
+        data.item.tel_num = dataCustomer.tel_num
+      }
     },
   },
 }
