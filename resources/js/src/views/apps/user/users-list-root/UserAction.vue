@@ -4,7 +4,7 @@
         id="modal-no-backdrop" 
         hide-backdrop 
         content-class="shadow" 
-        :title=userAction
+        :title="[(userData.is_active === 0 && userAction === 'block') ? ('Un ' + userAction) : userAction]"
         @ok="handleActionUser"
     >
         <p class="my-2">
