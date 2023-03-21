@@ -3,7 +3,6 @@
 
     <customer-list-add-new 
       :is-add-new-customer-sidebar-active.sync="isAddNewCustomerSidebarActive" 
-      :status-options="statusOptions"
       @refetch-data="refetchData"
     />
 
@@ -365,23 +364,6 @@ export default {
       { label: 'Inactive', value: 0 },
     ]
 
-    const currentUserData = ref(null);
-    currentUserData.value = {
-      id: null,
-      name: '',
-      email: '',
-      group_role: null,
-      password: '',
-      password_confirmation: '',
-    }
-
-    const getCurrentUser = (user) => {
-      currentUserData.value = JSON.parse(JSON.stringify(user))
-      isAddNewCustomerSidebarActive.value = true
-
-      refetchData()
-    }
-
     const {
       fetchCustomers,
       tableColumns,
@@ -440,10 +422,6 @@ export default {
       searchEmail,
 
       resetData,
-
-      getCurrentUser,
-
-      currentUserData,
 
       toast,
       ToastificationContent,
@@ -508,11 +486,8 @@ export default {
 
       data.item.isEdit = !data.item.isEdit
       
-      if(action === 'cancel')
+      if(action === 'cancel' || (action === 'save' && check === false))
       {
-        console.log('dataTmp')
-        console.log(data.item)
-
         let dataCustomer = JSON.parse( JSON.stringify( this.dataTmp[data.index] ) )
         data.item.address = dataCustomer.address
         data.item.customer_name = dataCustomer.customer_name

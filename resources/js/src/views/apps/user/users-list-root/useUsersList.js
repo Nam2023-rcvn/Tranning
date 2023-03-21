@@ -61,6 +61,9 @@ export default function useUsersList() {
   }
 
   const fetchUsers = (ctx, callback) => {
+    console.log('sortBy: ' + sortBy.value)
+    console.log('isSortDirDesc: ' + isSortDirDesc.value)
+
     store
       .dispatch('users/fetchUsers', {
         // q: searchQuery.value,
@@ -69,7 +72,7 @@ export default function useUsersList() {
         perPage: perPage.value,
         page: currentPage.value,
         // sortBy: sortBy.value,
-        // sortDesc: isSortDirDesc.value,
+        sortDesc: isSortDirDesc.value,
         role: roleFilter.value,
         status: statusFilter.value,
       })

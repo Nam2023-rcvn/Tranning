@@ -20,7 +20,11 @@ class UpdateProduct extends Controller
             'description',
         ]);
 
-        if ($request->hasFile('product_image')) {
+
+        if ($request->filled('product_image') && is_string($request->product_image)) {
+            $path = parse_url($request->product_image)['path'];
+            $data['product_image'] = str_replace('/tmp/', '', $path);
+        } elseif ($request->hasFile('product_image')) {
             $data['product_image'] = Storage::disk('tmp')->put('/products', $request->product_image);
         } else {
             $data['product_image'] = null;

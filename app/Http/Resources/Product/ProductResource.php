@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class ProductResource extends JsonResource
 {
@@ -20,6 +21,7 @@ class ProductResource extends JsonResource
             'product_price' => $this->product_price,
             'is_sales' => $this->is_sales,
             'status' => $this->status,
+            'description_str' => Str::limit(strip_tags($this->description), 50, ' (...)'),
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

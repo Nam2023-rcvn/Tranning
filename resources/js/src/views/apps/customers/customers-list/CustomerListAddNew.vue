@@ -15,7 +15,7 @@
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center content-sidebar-header px-2 py-1">
         <h5 v-if="customerData.id !== null" class="mb-0">
-          Chỉnh sửa User
+          Chỉnh sửa Customer
         </h5>
         <h5 v-else class="mb-0">
           Thêm khách hàng
@@ -125,13 +125,19 @@
             </b-form-group>
           </validation-provider>
 
-          <b-col
-            cols="12"
-            md="12"
-            class="mb-md-0 mb-2"
+          <b-form-group
+            label="Trạng thái"
+            label-for="is_active"
           >
-            <label>Trạng thái: TRUE</label>
-          </b-col>
+            <b-form-checkbox
+              id="checkbox-1"
+              v-model="customerData.is_active"
+              name="is_active"
+              value="1"
+              unchecked-value="0"
+            >
+            </b-form-checkbox>
+          </b-form-group>
 
           <!-- Form Actions -->
           <div class="d-flex mt-2 align-items-center justify-content-start">
@@ -161,7 +167,7 @@
 </template>
 
 <script>
-import { BAlert, BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BCol} from 'bootstrap-vue'
+import { BAlert, BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BCol, BFormCheckbox} from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref, toRefs, watch, computed } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
@@ -181,6 +187,7 @@ export default {
     BButton,
     BCol,
     BAlert,
+    BFormCheckbox,
 
     vSelect,
 
@@ -201,9 +208,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    statusOptions: {
-      type: Array,
-    },
   },
   data() {
     return {
@@ -218,6 +222,7 @@ export default {
       email: '',
       tel_num: '',
       address: '',
+      is_active: 1
     }
 
     const customerData = ref(JSON.parse(JSON.stringify(blankcustomerData)))

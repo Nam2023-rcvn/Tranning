@@ -29,7 +29,11 @@ class GetUserList extends Controller
 
     public function filterUsers(GetUserListRequest $request): Builder
     {
-        $users = User::latest();
+        $users = User::query();
+
+        if ($request->filled('sortDesc') && $request->sortDesc === 'true') {
+            $users->latest();
+        }
 
         if ($request->filled('role')) {
             $users->where('group_role', $request->role);

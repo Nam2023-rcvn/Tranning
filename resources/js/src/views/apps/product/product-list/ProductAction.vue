@@ -1,13 +1,13 @@
 <template>
     <div>
     <b-modal 
-        id="modal-no-backdrop" 
+        id="modal-action-products" 
         hide-backdrop 
         content-class="shadow" 
-        @ok="handleActionUser"
+        @ok="handleAction"
     >
         <p class="my-2">
-        Are you want <code> {{ (userData.is_active === 0 && userAction === 'block') ? ('Un ' + userAction) : userAction }} </code> user <code>{{ userData.name }}</code>
+        Are you want <code> {{ productAction }} </code> product <code>{{ productData.product_name }}</code>
         </p>
     </b-modal>
     </div>
@@ -29,38 +29,24 @@ export default {
       }
     },
     props: {
-        userData: {
+        productData: {
             type: Object,
         },
-        userAction: {
+        productAction: {
             type: String,
             required: true,
         },
     },
     methods: {
-        handleActionUser() {
-            switch(this.userAction) {
-            case 'block':
-                store.dispatch('users/blockUser', this.userData.id)
-                .then(response => { 
-                    this.alertSuccessful()
-                    this.$emit('refetch-data')
-                })
-                .catch(error => {
-                    this.alertError()
-                })
-                break;
-            case 'delete':
-                store.dispatch('users/deleteUser', this.userData.id)
-                .then(response => {
-                    this.alertSuccessful() 
-                    this.$emit('refetch-data')
-                })
-                .catch(error => {
-                    this.alertError()
-                })
-                break;
-            }
+        handleAction() {
+            store.dispatch('products/deleteProducts', this.productData.id)
+            .then(response => {
+                this.alertSuccessful() 
+                this.$emit('refetch-data')
+            })
+            .catch(error => {
+                this.alertError()
+            })
         },
         alertError(){
             this.$toast({

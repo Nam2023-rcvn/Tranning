@@ -23,18 +23,27 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $dataValidate = [
             'product_name' => ['required', 'min:5'],
             'product_price' => ['required', 'numeric', 'min:0'],
             'is_sales' => ['required'],
             'product_image' => [
                 'nullable',
+                'url'
+            ],
+        ];
+
+        if (request()->hasFile('product_image')) {
+            $dataValidate['product_image'] = [
+                'nullable',
                 'file',
                 'mimes:jpg,png,jpeg',
                 'max:2048',
                 'dimensions:max_width=1024'
-            ],
-        ];
+            ];
+        }
+
+        return $dataValidate;
     }
 
     /**

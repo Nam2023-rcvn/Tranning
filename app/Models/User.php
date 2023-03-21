@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\SoftDeleteUsers;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -73,5 +74,14 @@ class User extends Authenticatable
         }
 
         return 'Đang hoạt động';
+    }
+
+    public function setPasswordAttribute($value, bool $hash = true)
+    {
+        if ($hash === true) {
+            $value = Hash::make($value);
+        }
+
+        $this->attributes['password'] = $value;
     }
 }

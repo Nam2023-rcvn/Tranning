@@ -155,7 +155,7 @@ export default {
       // this.$ability.update(initialAbility)
 
       // Redirect to login page
-      this.$router.push({ name: 'auth-login' })
+      this.$router.push({ name: 'user-login' })
     },
   },
 }

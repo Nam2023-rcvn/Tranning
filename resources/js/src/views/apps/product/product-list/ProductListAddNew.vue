@@ -162,9 +162,8 @@
                     height="110"
                     width="110"
                     vertical-align="center"
-                    :src="productData.product_image"
+                    :src="productData.product_image !== null ? productData.product_image : imageDefault"
                   />
-                  
                 </b-media-aside>
                 <b-media-body>
                   <b-form-file
@@ -194,7 +193,7 @@
                     class=""
                     @click="resetImage()"
                   >
-                    Reset
+                    Delete
                   </b-button>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </b-media-body>
@@ -292,7 +291,7 @@ export default {
       required,
       alphaNum,
 
-      imageUpload: null
+      imageDefault: 'https://www.portofinoselecta.com/images/joomlart/demo/default.jpg',
     }
   },
   setup(props, { emit }) {
@@ -319,7 +318,7 @@ export default {
       product_price: null,
       description: '',
       is_sales: null,
-      product_image: '',
+      product_image: null,
     }
 
     const editorOption = {
@@ -330,18 +329,12 @@ export default {
       placeholder: 'Description',
     }
 
-    const resetProductData = () => {
-      console.log('resetProductData')
-      productData.value = JSON.parse(JSON.stringify(blankProductData))
-    }
+    const imageUpload = ref(null)
 
-    const base64Encode = data =>
-      new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(data);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
+    const resetProductData = () => {
+      productData.value = JSON.parse(JSON.stringify(blankProductData))
+      imageUpload.value = null
+    }
 
     const { refFormObserver, getValidationState, resetForm } = formValidation(resetProductData)
 
@@ -357,7 +350,8 @@ export default {
       inputImageRenderer,
       refInputEl,
       previewEl,
-      base64Encode,
+
+      imageUpload,
     }
   },
   methods: {
@@ -368,6 +362,10 @@ export default {
             this.productData.product_image = this.imageUpload
           }
 
+          if(this.productData.product_image === null) {
+            this.productData.product_image = ''
+          }
+          
           if(this.productData.id !== null){
             store.dispatch('products/updateProduct', this.productData)
             .then(response => { 
@@ -392,12 +390,9 @@ export default {
         }
       })
     },
-    previewFiles(){
-      this.productData.product_image = this.imageUpload
-    },
     resetImage(){
       this.$refs.refInputEl.reset()
-      this.productData.product_image = ''
+      this.productData.product_image = null
     }
   },
 }

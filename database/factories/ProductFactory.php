@@ -23,6 +23,8 @@ class ProductFactory extends Factory
             'product_name' => $name,
             'product_price' => $this->faker->randomDigit,
             'description' => $this->faker->text(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 

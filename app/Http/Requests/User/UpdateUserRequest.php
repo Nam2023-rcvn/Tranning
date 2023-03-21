@@ -30,7 +30,8 @@ class UpdateUserRequest extends FormRequest
                 'confirmed',
                 'required',
                 'min:5',
-                Password::min(5)->mixedCase()->numbers()
+                Password::min(5)->mixedCase()->numbers(),
+                'sometimes',
             ],
             'name' => ['required', 'min:5'],
             'email' => ['required', 'email', 'unique:'.get_class(new User()).',email,'.request()->id ],

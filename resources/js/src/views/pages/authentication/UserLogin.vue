@@ -221,8 +221,8 @@
     data() {
       return {
         status: '',
-        password: 'admin',
-        userEmail: 'admin@demo.com',
+        password: '12345678',
+        userEmail: 'test@gmail.com',
         sideImg: require('@/assets/images/pages/login-v2.svg'),
   
         // validation rules

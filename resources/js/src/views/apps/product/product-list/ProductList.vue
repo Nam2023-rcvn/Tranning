@@ -103,6 +103,7 @@
       </div>
 
       <b-table
+        id="table_products"
         ref="refProductListTable" class="position-relative" :items="fetchProducts" responsive
         :fields="tableColumns" primary-key="id" :sort-by.sync="sortBy" show-empty empty-text="No matching records found"
         :sort-desc.sync="isSortDirDesc"
@@ -126,7 +127,7 @@
               <span class="align-text-top text-capitalize">{{ data.item.product_name }}</span>
             </div>
             <img
-              v-if="isHover == data.item.id"
+              v-if="isHover == data.item.id && data.item.product_image"
               class="hover-img"
               alt="img-3"
               width="90"
@@ -137,7 +138,7 @@
 
         <!-- Column: description -->
         <template #cell(description)="data">
-          <span class="align-text-top text-capitalize">{{ data.item.description }}</span>
+          <span style="text-overflow: ellipsis;" class="align-text-top text-capitalize">{{ data.item.description_str }}</span>
         </template>
 
         <!-- Column: product_price -->
@@ -165,7 +166,7 @@
               <span class="align-middle ml-50">Edit</span>
             </b-dropdown-item>
 
-            <b-dropdown-item @click="deleteProduct(data.item)" v-b-modal.modal-no-backdrop>
+            <b-dropdown-item @click="handleAction(data.item, 'delete')" v-b-modal.modal-action-products>
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
@@ -192,6 +193,13 @@
         </b-row>
       </div>
     </b-card>
+
+    <product-action
+    :productData="productData"
+    :productAction="productAction"
+    @refetch-data="refetchData"
+    >
+    </product-action>
   </div>
 </template>
 
@@ -219,6 +227,7 @@ import { ref, onUnmounted } from '@vue/composition-api'
 import { avatarText } from '@core/utils/filter'
 import productList from './ProductList'
 import ProductListAddNew from './ProductListAddNew.vue'
+import ProductAction from './ProductAction.vue'
 
 export default {
   components: {
@@ -241,6 +250,7 @@ export default {
     vSelect,
     BCardBody,
     BImg,
+    ProductAction,
   },
   data() {
     return {
@@ -263,22 +273,21 @@ export default {
       product_price: null,
       description: '',
       is_sales: null,
-      product_image: '',
+      product_image: null
     }
-
-    const base64Encode = data =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(data);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
 
     const getCurrentProduct = (product) => {
       currentProductData.value = JSON.parse(JSON.stringify(product))
       isAddNewProductSidebarActive.value = true
 
       refetchData()
+    }
+
+    const productData = ref({})
+    const productAction = ref('')
+    const handleAction = (product, action) => {
+      productData.value = product;
+      productAction.value = action;
     }
 
     const {
@@ -349,43 +358,18 @@ export default {
       getCurrentProduct,
       toast,
       ToastificationContent,
+      handleAction,
+      productData,
+      productAction
     }
   },
   methods: {
-    deleteProduct(product) {
-      store.dispatch('products/deleteProducts', product.id)
-        .then(response => {
-          this.toast({
-            component: this.ToastificationContent,
-            props: {
-              title: 'successful',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
-          })
-
-          this.refetchData()
-
-        })
-        .catch(error => {
-          this.toast({
-            component: this.ToastificationContent,
-            props: {
-              title: 'ERROR',
-              icon: 'AlertTriangleIcon',
-              variant: 'danger',
-            },
-          })
-        })
-    },
     hoverRow(record, index){
     },
     mouseoverItem(id){
-      console.log('mouseoverItem')
       this.isHover = id
     },
     mouseleaveItem(id){
-      console.log('mouseleaveItem')
       this.isHover = null
     }
   }
@@ -395,6 +379,12 @@ export default {
 <style lang="scss" scoped>
 .per-page-selector {
   width: 90px;
+}
+</style>
+
+<style>
+#table_products tr{
+  height: 50px;
 }
 </style>
 

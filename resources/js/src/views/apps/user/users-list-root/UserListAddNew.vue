@@ -108,9 +108,9 @@
 
           <!-- password -->
           <validation-provider
-          #default="{ errors }"
+            #default="{ errors }"
             name="password"
-            rules="required"
+            :rules="userData.id !== null ? '' : 'required'"
             vid="password"
           >
             <b-form-group
@@ -133,7 +133,7 @@
           <validation-provider
           #default="{ errors }"
             name="password_confirmation"
-            rules="required|confirmed:password"
+            :rules="userData.id !== null ? '' : 'required|confirmed:password'"
             vid="password_confirmation"
           >
             <b-form-group
@@ -322,9 +322,6 @@ export default {
               this.$emit('update:is-add-new-user-sidebar-active', false)
             })
             .catch(error => {
-              console.log('error')
-              console.log(error)
-              console.log(error.response)
               this.$refs.refFormObserver.setErrors(error.response.data.errors)
             })
           }
