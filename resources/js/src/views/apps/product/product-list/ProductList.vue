@@ -272,8 +272,8 @@ export default {
       product_name: '',
       product_price: null,
       description: '',
-      is_sales: null,
-      product_image: null
+      is_sales: 1,
+      product_image: ''
     }
 
     const getCurrentProduct = (product) => {

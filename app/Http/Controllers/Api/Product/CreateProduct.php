@@ -20,8 +20,6 @@ class CreateProduct extends Controller
 
         if ($request->hasFile('product_image')) {
             $data['product_image'] = Storage::disk('tmp')->put('/products', $request->product_image);
-        } else {
-            $data['product_image'] = null;
         }
 
         Product::create($data);

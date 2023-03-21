@@ -162,7 +162,7 @@
                     height="110"
                     width="110"
                     vertical-align="center"
-                    :src="productData.product_image !== null ? productData.product_image : imageDefault"
+                    :src="productData.product_image ? productData.product_image : imageDefault"
                   />
                 </b-media-aside>
                 <b-media-body>
@@ -317,8 +317,8 @@ export default {
       product_name: '',
       product_price: null,
       description: '',
-      is_sales: null,
-      product_image: null,
+      is_sales: 1,
+      product_image: '',
     }
 
     const editorOption = {
@@ -392,7 +392,7 @@ export default {
     },
     resetImage(){
       this.$refs.refInputEl.reset()
-      this.productData.product_image = null
+      this.productData.product_image = ''
     }
   },
 }

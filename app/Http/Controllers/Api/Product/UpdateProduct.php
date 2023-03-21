@@ -20,7 +20,6 @@ class UpdateProduct extends Controller
             'description',
         ]);
 
-
         if ($request->filled('product_image') && is_string($request->product_image)) {
             $path = parse_url($request->product_image)['path'];
             $data['product_image'] = str_replace('/tmp/', '', $path);
