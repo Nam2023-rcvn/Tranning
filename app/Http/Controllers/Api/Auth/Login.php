@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Reponse\BaseHttpResponse;
 use App\Http\Resources\User\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class Login extends Controller
 {
@@ -19,12 +20,19 @@ class Login extends Controller
                 'last_login_ip' => $request->ip()
             ]);
 
-            $accessToken = $user->createToken('oath_token')->accessToken;
+            $accessToken = $user->createToken('oath_token');
+
+            $token = $accessToken->token;
+            $token->expires_at = Carbon::now()->addMinutes(config('session.lifetime'));
+            if ($request->remember_me) {
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            }
+            $token->save();
 
             return response()
             ->json([
                 'user' => UserResource::make($user),
-                'accessToken' => $accessToken
+                'accessToken' => $accessToken->accessToken
             ]);
             ;
         }

@@ -177,13 +177,16 @@
             </b-form-group>
           </validation-provider>
 
-          <b-col
-            cols="12"
-            md="12"
-            class="mb-md-0 mb-2"
-          >
-            <label>Trạng thái: TRUE</label>
-          </b-col>
+          <!-- checkbox -->
+          <b-form-group>
+            <b-form-checkbox
+              id="remember-me"
+              v-model="userData.is_active"
+              name="checkbox"
+            >
+              Trạng thái
+            </b-form-checkbox>
+          </b-form-group>
 
           <!-- Form Actions -->
           <div class="d-flex mt-2 align-items-center justify-content-start">
@@ -213,7 +216,7 @@
 </template>
 
 <script>
-import { BAlert, BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BCol } from 'bootstrap-vue'
+import { BFormCheckbox, BAlert, BSidebar, BForm, BFormGroup, BFormInput, BFormInvalidFeedback, BButton, BCol } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref, toRefs, watch, computed } from '@vue/composition-api'
 import { required, alphaNum, email } from '@validations'
@@ -234,6 +237,7 @@ export default {
     BCol,
     BAlert,
     vSelect,
+    BFormCheckbox,
 
     // Form Validation
     ValidationProvider,
@@ -275,6 +279,7 @@ export default {
       group_role: null,
       password: '',
       password_confirmation: '',
+      is_active: true,
     }
 
     const userData = computed({

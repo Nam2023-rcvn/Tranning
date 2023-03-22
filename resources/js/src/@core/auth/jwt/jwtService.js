@@ -8,7 +8,7 @@ export default class JwtService {
   jwtConfig = { ...jwtDefaultConfig }
 
   // For Refreshing Token
-  isAlreadyFetchingAccessToken = false
+  isAlreadyFetchingAccessToken = true
 
   // For Refreshing Token
   subscribers = []
@@ -91,6 +91,10 @@ export default class JwtService {
 
   setToken(value) {
     localStorage.setItem(this.jwtConfig.storageTokenKeyName, value)
+  }
+
+  deleteToken() {
+    localStorage.removeItem(this.jwtConfig.storageTokenKeyName)
   }
 
   setRefreshToken(value) {

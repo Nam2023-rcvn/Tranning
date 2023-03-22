@@ -300,6 +300,7 @@ export default {
       group_role: null,
       password: '',
       password_confirmation: '',
+      is_active: true,
     }
 
     const getCurrentUser = (user) => {
